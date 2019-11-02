@@ -10,4 +10,4 @@ riot_api = riotapi.RiotAPI(api_key, region, tftregion)
 
 bretsky = riot_api.get_summoner("Furukawa")
 
-print(riot_api.get_tft_matches(bretsky))
+print(len(riot_api.get_tft_matches(bretsky)))

@@ -11,6 +11,7 @@ class RiotAPI(object):
 	def get_summoner(self, name):
 		url = "https://{}.api.riotgames.com/tft/summoner/v1/summoners/by-name/{}".format( self.region, name)
 		res = requests.get(url=url, headers=self.headers)
+		print(res)
 		return Summoner(res.json())
 
 	def get_matches(self, summoner, begin_index=-1, end_index=-1):
@@ -33,14 +34,13 @@ class RiotAPI(object):
 	def get_tft_match(self, match_id):
 		url = "https://{}.api.riotgames.com/tft/match/v1/matches/{}".format(self.tftregion, match_id)
 		res = requests.get(url=url, headers=self.headers)
-		return res.json()
+		return TFTMatch(res.json())
 
 	def get_tft_matches(self, summoner):
 		match_data = []
 		for match_id in self.get_tft_match_ids(summoner):
 			match_data.append(self.get_tft_match(match_id))
 		return match_data
-
 
 class Summoner(object):
 	def __init__(self, data):
@@ -52,4 +52,17 @@ class Summoner(object):
 		self.revisionDate = datetime.utcfromtimestamp(data['revisionDate'] / 1000)
 		self.level = data['summonerLevel']
 
-	
+class TFTMatch(object):
+	def __init__(self, data):
+		self.id = data['metadata']['match_id']
+		self.version = data['info']['game_version']
+		self.date = data['info']['game_datetime']
+		self.participants = [TFTParticipant(p, self.id) for p in data['info']['participants']]
+
+class TFTParticipant(object):
+	def __init__(self, data, match_id):
+		self.match_id = match_id
+		self.puuid = data['puuid']
+		self.place = data["placement"]
+		self.traits = data["traits"]
+		self.units = data["units"]

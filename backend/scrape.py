@@ -46,18 +46,19 @@ def save_recent_matches(puuid):
 	puuids = []
 	for match in matches:
 		# print(match.version)
-		version_number = match.version.split(' ')[1].split('.')
-		if version_number[0] == env["version_big"] and version_number[1] == env["version_small"]:
-			puuids.extend(save_match(match))
-		else:
-			print("Wrong version")
+		if match != False:
+			version_number = match.version.split(' ')[1].split('.')
+			if version_number[0] == env["version_big"] and version_number[1] == env["version_small"]:
+				puuids.extend(save_match(match))
+			else:
+				print("Wrong version")
 			print(version_number)
 	print(puuids)
 	return puuids
 
 
 def recursive_scrape(puuid, added):
-	if len(added) > 100 or puuid in added:
+	if len(added) > 1000 or puuid in added:
 		return
 	puuids = save_recent_matches(puuid)
 	print(len(added))

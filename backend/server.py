@@ -24,7 +24,7 @@ def comps():
 	except (ValueError, TypeError) as e:
 		n = 10
 	comp_list = wr_col.find()
-	if comp_list.count() == 0 or (datetime.now() - datetime.fromtimestamp(comp_list[0]["last_update"])).total_seconds() > 5 * 60:
+	if comp_list.count() == 0 or (datetime.now() - datetime.fromtimestamp(comp_list[0]["last_update"])).total_seconds() > 3 * 60:
 		winrates = main.update_comps()
 	else:
 		winrates = comp_list[0]

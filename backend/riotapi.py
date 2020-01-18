@@ -38,15 +38,17 @@ class RiotAPI(object):
 		res = requests.get(url=url, headers=self.headers)
 		return res.json()
 
-	def get_tft_match(self, match_id):
+	def get_tft_match(self, match_id, timeout=30):
 		url = "https://{}.api.riotgames.com/tft/match/v1/matches/{}".format(self.tftregion, match_id)
 		res = requests.get(url=url, headers=self.headers)
 		try:
 			return TFTMatch(res.json())
 		except KeyError:
-			print("Couldn't get match, retrying")
-			time.sleep(120)
-			return self.get_tft_match(match_id)
+			print("Couldn't get match, retrying after {} seconds".format(timeout))
+			if timeout > 960:
+				return False
+			time.sleep(timeout)
+			return self.get_tft_match(match_id, timeout*2)
 
 	def get_tft_matches(self, summoner):
 		match_data = []

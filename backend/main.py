@@ -1,6 +1,7 @@
 import json
 import pymongo
 from datetime import datetime
+import pytz
 
 env = json.load(open("env.json", "r"))
 
@@ -42,9 +43,9 @@ def update_comps():
 	sorted_keys = sorted(list(places.keys()), key=lambda x: len(places[x]), reverse=True)
 
 	for key in sorted_keys:
-		weighted_places[key] = sum(places[key]) / len(places[key]) * (len(places[key]) ** 0.35 - 1) / len(places[key]) ** 0.35 + 4.5 * 1 / len(places[key]) ** 0.35 # Weighting factor to make comps with less data points closer to the average.
+		weighted_places[key] = sum(places[key]) / len(places[key]) * (len(places[key]) ** 0.4 - 1) / len(places[key]) ** 0.4 + 4.5 * 1 / len(places[key]) ** 0.4 # Weighting factor to make comps with less data points closer to the average.
 		winrates[key] = len(list(filter(lambda x: x < 5, places[key]))) / len(places[key])
-		weighted_winrates[key] = winrates[key] * (len(places[key]) ** 0.35 - 1) / len(places[key]) ** 0.35 + 0.5 * 1 / len(places[key]) ** 0.35 # Weighting factor to make comps with less data points closer to the average.
+		weighted_winrates[key] = winrates[key] * (len(places[key]) ** 0.4 - 1) / len(places[key]) ** 0.4 + 0.5 * 1 / len(places[key]) ** 0.4 # Weighting factor to make comps with less data points closer to the average.
 		if len(places[key]) == 1:
 			uniques += 1
 		if len(places[key]) > longest:
@@ -56,10 +57,12 @@ def update_comps():
 			# print(weighted_winrates[key])
 
 	sorted_keys = sorted(list(places.keys()), key=lambda x: weighted_winrates[x], reverse=True)
-	now = datetime.now()
-	jsonobject = {"last_update": now.timestamp(), "comps": [], "last_update_human": now.strftime("%m/%d/%Y, %H:%M:%S")}
+	now = datetime.utcnow()
+	now = now.replace(tzinfo=pytz.utc)
+	local_now = now.astimezone(pytz.timezone('America/Toronto'))
+	jsonobject = {"last_update": local_now.timestamp(), "comps": [], "last_update_human": local_now.strftime("%m/%d/%Y, %H:%M:%S")}
 	for key in sorted_keys:
-		jsonobject["comps"].append({"comp": key, "winrate": weighted_winrates[key]})
+		jsonobject["comps"].append({"comp": key, "weighted_winrate": weighted_winrates[key], "winrate": winrates[key], "instances": len(places[key])})
 	wr_col.update_one({}, {'$set': jsonobject}, upsert=True)
 	# json.dump(jsonobject, open('comps.json', 'w'))
 	# for key in sorted_keys[:50]:

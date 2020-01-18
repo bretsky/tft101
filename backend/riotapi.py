@@ -1,5 +1,6 @@
 import requests
 from datetime import datetime
+import time
 
 class RiotAPI(object):
 	def __init__(self, api_key, region, tftregion):
@@ -9,7 +10,13 @@ class RiotAPI(object):
 		self.headers = {"X-Riot-Token": api_key}
 
 	def get_summoner(self, name):
-		url = "https://{}.api.riotgames.com/tft/summoner/v1/summoners/by-name/{}".format( self.region, name)
+		url = "https://{}.api.riotgames.com/tft/summoner/v1/summoners/by-name/{}".format(self.region, name)
+		res = requests.get(url=url, headers=self.headers)
+		print(res)
+		return Summoner(res.json())
+
+	def get_summoner_by_puuid(self, puuid):
+		url = "https://{}.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/{}".format(self.region, puuid)
 		res = requests.get(url=url, headers=self.headers)
 		print(res)
 		return Summoner(res.json())
@@ -34,7 +41,12 @@ class RiotAPI(object):
 	def get_tft_match(self, match_id):
 		url = "https://{}.api.riotgames.com/tft/match/v1/matches/{}".format(self.tftregion, match_id)
 		res = requests.get(url=url, headers=self.headers)
-		return TFTMatch(res.json())
+		try:
+			return TFTMatch(res.json())
+		except KeyError:
+			print("Couldn't get match, retrying")
+			time.sleep(120)
+			return self.get_tft_match(match_id)
 
 	def get_tft_matches(self, summoner):
 		match_data = []

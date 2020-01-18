@@ -6,7 +6,7 @@ env = json.load(open("env.json", "r"))
 
 myclient = pymongo.MongoClient(env["mongo_url"])
 mydb = myclient["comps"]
-mycol = mydb["9.24b"]
+mycol = mydb["10.1"]
 
 places = {}
 weighted_places = {}

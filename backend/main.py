@@ -5,8 +5,10 @@ from datetime import datetime
 env = json.load(open("env.json", "r"))
 
 myclient = pymongo.MongoClient(env["mongo_url"])
-mydb = myclient["comps"]
-mycol = mydb["10.1"]
+comp_db = myclient["comps"]
+wr_db = myclient["winrates"]
+comp_col = comp_db[env["version_big"] + "." + env["version_small"]]
+wr_col = wr_db[env["version_big"] + "." + env["version_small"]]
 
 def update_comps():
 
@@ -16,7 +18,7 @@ def update_comps():
 	weighted_winrates = {}
 
 	trait_totals = {}
-	comps = mycol.find()
+	comps = comp_col.find()
 	n = 0
 	for comp in comps:
 		n += 1
@@ -54,10 +56,12 @@ def update_comps():
 			# print(weighted_winrates[key])
 
 	sorted_keys = sorted(list(places.keys()), key=lambda x: weighted_winrates[x], reverse=True)
-	jsonobject = {"last_update": datetime.now().timestamp(), "comps": []}
+	now = datetime.now()
+	jsonobject = {"last_update": now.timestamp(), "comps": [], "last_update_human": now.strftime("%m/%d/%Y, %H:%M:%S")}
 	for key in sorted_keys:
-		jsonobject["comps"].append({"comp": key, "winrate": winrates[key]})
-	json.dump(jsonobject, open('comps.json', 'w'))
+		jsonobject["comps"].append({"comp": key, "winrate": weighted_winrates[key]})
+	wr_col.update_one({}, {'$set': jsonobject}, upsert=True)
+	# json.dump(jsonobject, open('comps.json', 'w'))
 	# for key in sorted_keys[:50]:
 	# 	print(', '.join([str(k) for k in key]) + ': ' + str(places[key]))
 	# 	print(len(places[key]))
@@ -70,6 +74,7 @@ def update_comps():
 	# print(len(sorted_keys))
 	# print(uniques)
 	# print(longest)
+	return jsonobject
 
 if __name__ == "__main__":
 	update_comps()

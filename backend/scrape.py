@@ -2,6 +2,7 @@ import riotapi
 import json
 import pymongo
 from datetime import datetime
+import sys
 
 env = json.load(open("env.json", "r"))
 api_key = env["api-key"]
@@ -64,6 +65,9 @@ def recursive_scrape(puuid, added):
 	for puuid in puuids:
 		recursive_scrape(puuid, added)
 
-first_summoner = riot_api.get_summoner("Imperishable kk")
+if len(sys.argv) > 1:
+	first_summoner = riot_api.get_summoner(sys.argv[1])
+else: 
+	first_summoner = riot_api.get_summoner("Furukawa")
 
 recursive_scrape(first_summoner.puuid, [])

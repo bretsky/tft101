@@ -1,5 +1,6 @@
-__pycache__/*
+backend/__pycache__/*
+backend/venv/*
 # Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+backend/.elasticbeanstalk/*
+!backend/.elasticbeanstalk/*.cfg.yml
+!backend/.elasticbeanstalk/*.global.yml

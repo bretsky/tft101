@@ -1,6 +1,9 @@
 import React from 'react';
 import './App.css';
 import Axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
+
 
 const displayNames = {'Set2_Blademaster': 'Blademaster', 'Celestial' : 'Lunar',
  'Set2_Glacial' : 'Glacial', 'Set2_Ranger' : 'Ranger', 'Wind' : 'Cloud', 'Metal' : 'Steel'}
@@ -74,18 +77,26 @@ class App extends React.Component {
     }else if(level === 2){
       return 'silverHex';
     }else if(level === 3){
-      return 'goldHex';
+      return 'diamondHex';
     }
   }
  }
 
  componentDidMount() {
-  Axios.get('http://tft101-dev.us-east-2.elasticbeanstalk.com/comps').then((response)=>{
+  Axios.get('https://api.tft101.com/comps').then((response)=>{
     console.log(response)
-    this.setState({comps: response.data})
+    this.setState({comps: response.data.map(c => {
+      c.active = false;
+      return c;
+    })})
   }); 
  }
 
+ toggleDropdown(index) {
+  var newComps = this.state.comps.map(a => Object.assign({}, a));
+  newComps[index].active = !newComps[index].active;
+  this.setState({comps: newComps})
+ }
 
  render() {
   console.log(images);
@@ -107,24 +118,41 @@ class App extends React.Component {
           for(var trait of comp.comp) {
             traits.push([this.replaceName(trait[0]), trait[1]])
           }
-
+          console.log(traits)
           return (
-            <div className={"comp" + (i % 2)} key={i}>
-              <div className="rank">{i+1}</div>
-              <div className="traits">{traits.map(trait => {
-                return (
-                  <div className="trait">
-                    <div className={"traitImageHex " + this.getCompColor(trait[0], trait[1])}></div>
-                    <img className="traitImage" src = {images[trait[0] + '_TFT_icon.png']}/>
-                    <div className="traitText">{trait[0]}</div>
-                  </div> 
-
-
-
-                  )
-
-              })}</div>
-            </div>)
+            <div>
+              <div onClick={() => this.toggleDropdown(i)} className={"comp" + (i % 2)} key={i}>
+                <div className="rank">{i+1}</div>
+                <div className="traits">
+                  {traits.map(trait => {
+                    return (
+                      <div className="trait">
+                        <div className={"traitImageHex " + this.getCompColor(trait[0], trait[1])}></div>
+                        <img className="traitImage" src = {images[trait[0] + '_TFT_icon.png']}/>
+                        <div className="traitText">{trait[0]}</div>
+                      </div> 
+                      )
+                  })}
+                </div>
+                <div className="traitWinrate">{Math.round(comp.weighted_winrate * 1000) / 10 + '%'}<FontAwesomeIcon style={{marginLeft: '20px', marginRight: '20px'}} icon={faAngleDown} /></div>
+              </div>
+              {this.state.comps[i].active && 
+                <div className="traitList">
+                  {traits.map(trait => {
+                    return (
+                      <div className="traitDetails">
+                        <div className="traitIcon">
+                          <div className={"traitImageHex " + this.getCompColor(trait[0], trait[1])}></div>
+                          <img className="traitImage" src = {images[trait[0] + '_TFT_icon.png']}/>
+                          <div className="traitText">{trait[0]}</div>
+                        </div>
+                      </div> 
+                      )
+                  })}
+                </div>
+              }
+            </div>
+            )
         })}
       </div>
     </div>

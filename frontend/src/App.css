@@ -46,14 +46,23 @@
   cursor: pointer;
 }
 
-.traitList {
+.compDetails {
+  padding: 8px;
   background-color: #E54D52;
 }
 
-.traitDetails {
-  padding: 20px;
-  height: 105px;
-  position: relative;
+.champ {
+  display: inline-block;
+  margin: 8px;
+  height: 80px;
+  width: 64px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.champImage {
+  width: 64px;
+  height: 64px;
 }
 
 .traitIcon {

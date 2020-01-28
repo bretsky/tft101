@@ -17,7 +17,7 @@ def update_comps():
 	now = datetime.utcnow()
 	now = now.replace(tzinfo=pytz.utc)
 	local_now = now.astimezone(pytz.timezone('America/Toronto'))
-	jsonobject = {"last_update": local_now.timestamp(), "last_update_human": local_now.strftime("%m/%d/%Y, %H:%M:%S")}
+	jsonobject = {"last_update": local_now.timestamp(), "last_update_human": local_now.strftime("%m/%d/%Y, %H:%M:%S"), "updating": True}
 	wr_col.update_one({}, {'$set': jsonobject}, upsert=True)
 	places = {}
 	weighted_places = {}
@@ -26,7 +26,8 @@ def update_comps():
 	champs = {}
 
 	trait_totals = {}
-	comps = comp_col.find()
+	comps = comp_col.find({})
+	print("Got comps")
 	n = 0
 	for comp in comps:
 		n += 1
@@ -46,19 +47,26 @@ def update_comps():
 
 		if key not in champs:
 			champs[key] = {}
+		added_champs = set()
 		for champ in comp["units"]:
-			if champ["name"] in champs[key]:
-				champs[key][champ["name"]][0] += 1
+			name = champ["name"]
+			if name == "":
+				name = champ["character_id"]
+			if name in added_champs:
+				continue
+			added_champs.add(name)
+			if name in champs[key]:
+				champs[key][name][0] += 1
 			else:
-				champs[key][champ["name"]] = [1, {}]
+				champs[key][name] = [1, {}]
 			for item in champ["items"]:
-				if item in champs[key][champ["name"]][1]:
-					champs[key][champ["name"]][1][item] += 1
+				if item in champs[key][name][1]:
+					champs[key][name][1][item] += 1
 				else:
-					champs[key][champ["name"]][1][item] = 1
+					champs[key][name][1][item] = 1
 
 
-
+	print("recorded comps")
 	longest = 0
 	uniques = 0
 	counter = 0
@@ -95,10 +103,9 @@ def update_comps():
 			print("uploading 100 comps")
 			wr_col.update_one({}, {"$push": {"comps": {"$each": temp_comps}}})
 			temp_comps = []
-		else:
-			print(len(temp_comps))
 	wr_col.update_one({}, {"$push": {"comps": {"$each": temp_comps}}})
-	wr_col.update_one({}, {'$set': {"updating", False}})
+	update_false = {"updating": False}
+	wr_col.update_one({}, {'$set': update_false})
 	# json.dump(jsonobject, open('comps.json', 'w'))
 	# for key in sorted_keys[:50]:
 	# 	print(', '.join([str(k) for k in key]) + ': ' + str(places[key]))

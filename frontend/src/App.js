@@ -8,6 +8,10 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 const displayNames = {'Set2_Blademaster': 'Blademaster', 'Celestial' : 'Lunar',
  'Set2_Glacial' : 'Glacial', 'Set2_Ranger' : 'Ranger', 'Wind' : 'Cloud', 'Metal' : 'Steel'}
 
+const champNames = {'KogMaw': 'Kog\'Maw', "Leblanc": "LeBlanc", "RekSai": "Rek'Sai", "DrMundo": "Dr. Mundo", "TFT2_Amumu": "Amumu", "TFT2_Karma": "Karma", "TFT2_Leona": "Leona", "MasterYi": "Master Yi", "TFT2_Senna": "Senna"}
+
+const champUrlNames = {"TFT2_Amumu": "Amumu", "TFT2_Karma": "Karma", "TFT2_Leona": "Leona", "TFT2_Senna": "Senna"}
+
 const traitLevels = {
   'Alchemist' : 1,
   'Assassin' : 2,
@@ -62,6 +66,22 @@ class App extends React.Component {
   }
  }
 
+ formatChampName(name) {
+  if (name in champNames) {
+    return champNames[name]
+  } else {
+    return name;
+  }
+ }
+
+ getChampUrlName(name) {
+  if (name in champUrlNames) {
+    return champUrlNames[name]
+  } else {
+    return name;
+  }
+ }
+
  getCompColor(name, level) {
   if (traitLevels[name] === 1) {
     return 'goldHex';
@@ -89,7 +109,11 @@ class App extends React.Component {
       c.active = false;
       return c;
     })})
-  }); 
+  });
+  Axios.get('https://ddragon.leagueoflegends.com/api/versions.json').then((response)=>{
+    console.log(response)
+    this.setState({version: response.data[0]})
+  }) 
  }
 
  toggleDropdown(index) {
@@ -137,16 +161,14 @@ class App extends React.Component {
                 <div className="traitWinrate">{Math.round(comp.weighted_winrate * 1000) / 10 + '%'}<FontAwesomeIcon style={{marginLeft: '20px', marginRight: '20px'}} icon={faAngleDown} /></div>
               </div>
               {this.state.comps[i].active && 
-                <div className="traitList">
-                  {traits.map(trait => {
+                <div className="compDetails">
+                  {comp.champs.map(champ => {
                     return (
-                      <div className="traitDetails">
-                        <div className="traitIcon">
-                          <div className={"traitImageHex " + this.getCompColor(trait[0], trait[1])}></div>
-                          <img className="traitImage" src = {images[trait[0] + '_TFT_icon.png']}/>
-                          <div className="traitText">{trait[0]}</div>
-                        </div>
-                      </div> 
+                      <div className="champ">
+                        <img className="champImage" src={"http://ddragon.leagueoflegends.com/cdn/" + this.state.version + "/img/champion/" + this.getChampUrlName(champ[0]) + ".png"}/>
+                        <div>{this.formatChampName(champ[0]) + ': '}</div>
+                        <div>{Math.round(champ[1] * 1000) / 10 + '%'}</div>
+                      </div>
                       )
                   })}
                 </div>

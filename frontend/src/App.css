@@ -1,0 +1,197 @@
+.App {
+  min-height: 100vh;
+  color : white;
+  text-align: center;
+  background-color: #282c34;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.rank {
+  margin-right: 8px;
+  width: 32px;
+  display: inline-block;
+}
+
+.compList {
+  text-align: left;
+  width: 50%;
+  margin: auto;
+  padding-bottom: 40px;
+}
+
+.traits {
+  display: inline-block;
+  height: 105px;
+}
+
+.comp0 {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  background-color: #f72642;
+  position: relative;
+  cursor: pointer;
+}
+
+.comp1 {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  background-color: #d37361;
+  position: relative;
+  cursor: pointer;
+}
+
+.traitList {
+  background-color: #E54D52;
+}
+
+.traitDetails {
+  padding: 20px;
+  height: 105px;
+  position: relative;
+}
+
+.traitIcon {
+  width: 72px;
+}
+
+.trait {
+  display: inline-block;
+  margin: 8px;
+  height: 80px;
+}
+
+.traitImageHex {
+ 
+  position: relative;
+  width: 72px; 
+  height: 41.57px;
+  background-color: #64C7CC;
+  margin: 20.78px 0;
+}
+
+.traitImageHex:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  border-left: 36px solid transparent;
+  border-right: 36px solid transparent;
+  bottom: 100%;
+  border-bottom: 20.78px solid #64C7CC;
+}
+
+.traitImageHex:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  border-left: 36px solid transparent;
+  border-right: 36px solid transparent;
+  top: 100%;
+  width: 0;
+  border-top: 20.78px solid #64C7CC;
+}
+
+.bronzeHex {
+  background-color: #906431;
+}
+
+.bronzeHex:before {
+  border-bottom: 20.78px solid #906431;
+}
+
+.bronzeHex:after {
+  border-top: 20.78px solid #906431;
+}
+
+.goldHex {
+  background-color: #b79c30;
+}
+
+.goldHex:before {
+  border-bottom: 20.78px solid #b79c30;
+}
+
+.goldHex:after {
+  border-top: 20.78px solid #b79c30;
+}
+
+.silverHex {
+  background-color: #b0b0b0;
+}
+
+.silverHex:before {
+  border-bottom: 20.78px solid #b0b0b0;
+}
+
+.silverHex:after {
+  border-top: 20.78px solid #b0b0b0;
+}
+
+.diamondHex {
+  background-color: #96ffff;
+}
+
+.diamondHex:before {
+  border-bottom: 20.78px solid #96ffff;
+}
+
+.diamondHex:after {
+  border-top: 20.78px solid #96ffff;
+}
+
+.traitWinrate {
+  float: right;
+  position: absolute;
+  right: 20px;
+  font-size: 32px;
+}
+
+.traitImage {
+  position: relative;
+  height: 55px;
+  width: 55px;
+  top: -69.07px;
+  left: 8.5px;
+  filter : brightness(0);
+}
+
+.traitText {
+  font-size: 10px;
+  position: relative;
+  top: -50.07px;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: top;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

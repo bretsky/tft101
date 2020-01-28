@@ -15,7 +15,7 @@ riot_api = riotapi.RiotAPI(api_key, region, tftregion)
 
 myclient = pymongo.MongoClient(env["mongo_url"])
 mydb = myclient["comps"]
-mycol = mydb["10.1"]
+mycol = mydb[env["version_big"] + "." + env["version_small"]]
 
 def convert_to_json(participant):
 	return {'place': participant.place, 'units': participant.units, 'traits': participant.traits, 'match_id': participant.match_id, 'puuid': participant.puuid}
@@ -58,7 +58,7 @@ def save_recent_matches(puuid):
 
 
 def recursive_scrape(puuid, added):
-	if len(added) > 1000 or puuid in added:
+	if len(added) > 500 or puuid in added:
 		return
 	puuids = save_recent_matches(puuid)
 	print(len(added))

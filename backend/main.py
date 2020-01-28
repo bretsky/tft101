@@ -4,6 +4,7 @@ from datetime import datetime
 import pytz
 
 env = json.load(open("env.json", "r"))
+# champ_data = json.load(open("champions.json", "r"))
 
 myclient = pymongo.MongoClient(env["mongo_url"])
 comp_db = myclient["comps"]
@@ -11,12 +12,18 @@ wr_db = myclient["winrates"]
 comp_col = comp_db[env["version_big"] + "." + env["version_small"]]
 wr_col = wr_db[env["version_big"] + "." + env["version_small"]]
 
-def update_comps():
 
+def update_comps():
+	now = datetime.utcnow()
+	now = now.replace(tzinfo=pytz.utc)
+	local_now = now.astimezone(pytz.timezone('America/Toronto'))
+	jsonobject = {"last_update": local_now.timestamp(), "last_update_human": local_now.strftime("%m/%d/%Y, %H:%M:%S")}
+	wr_col.update_one({}, {'$set': jsonobject}, upsert=True)
 	places = {}
 	weighted_places = {}
 	winrates = {}
 	weighted_winrates = {}
+	champs = {}
 
 	trait_totals = {}
 	comps = comp_col.find()
@@ -36,6 +43,16 @@ def update_comps():
 			places[key].append(comp["place"])
 		else:
 			places[key] = [comp["place"]]
+
+		if key not in champs:
+			champs[key] = {}
+		for champ in comp["units"]:
+			if champ["name"] in champs[key]:
+				champs[key][champ["name"]] += 1
+			else:
+				champs[key][champ["name"]] = 1
+
+
 
 	longest = 0
 	uniques = 0
@@ -62,7 +79,8 @@ def update_comps():
 	local_now = now.astimezone(pytz.timezone('America/Toronto'))
 	jsonobject = {"last_update": local_now.timestamp(), "comps": [], "last_update_human": local_now.strftime("%m/%d/%Y, %H:%M:%S")}
 	for key in sorted_keys:
-		jsonobject["comps"].append({"comp": key, "weighted_winrate": weighted_winrates[key], "winrate": winrates[key], "instances": len(places[key])})
+		sorted_champs = [(k, champs[key][k]/len(places[key])) for k in sorted(list(champs[key].keys()), key=lambda x: champs[key][x], reverse=True)]
+		jsonobject["comps"].append({"comp": key, "weighted_winrate": weighted_winrates[key], "winrate": winrates[key], "instances": len(places[key]), "champs": sorted_champs})
 	wr_col.update_one({}, {'$set': jsonobject}, upsert=True)
 	# json.dump(jsonobject, open('comps.json', 'w'))
 	# for key in sorted_keys[:50]:

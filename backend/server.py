@@ -4,6 +4,7 @@ import main
 import json
 from datetime import datetime
 import pymongo
+import threading
 
 application = Flask(__name__)
 CORS(application)
@@ -24,8 +25,12 @@ def comps():
 	except (ValueError, TypeError) as e:
 		n = 10
 	comp_list = wr_col.find()
-	if comp_list.count() == 0 or (datetime.now() - datetime.fromtimestamp(comp_list[0]["last_update"])).total_seconds() > 3 * 60:
+	if comp_list.count() == 0:
 		winrates = main.update_comps()
+	elif (datetime.now() - datetime.fromtimestamp(comp_list[0]["last_update"])).total_seconds() > 3 * 60:
+		thread = threading.Thread(target=main.update_comps, args=())
+		thread.start()
+		winrates = comp_list[0]
 	else:
 		winrates = comp_list[0]
 	return jsonify(winrates["comps"][:n])

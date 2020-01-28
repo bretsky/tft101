@@ -48,9 +48,14 @@ def update_comps():
 			champs[key] = {}
 		for champ in comp["units"]:
 			if champ["name"] in champs[key]:
-				champs[key][champ["name"]] += 1
+				champs[key][champ["name"]][0] += 1
 			else:
-				champs[key][champ["name"]] = 1
+				champs[key][champ["name"]] = [1, {}]
+			for item in champ["items"]:
+				if item in champs[key][champ["name"]][1]:
+					champs[key][champ["name"]][1][item] += 1
+				else:
+					champs[key][champ["name"]][1][item] = 1
 
 
 
@@ -77,11 +82,23 @@ def update_comps():
 	now = datetime.utcnow()
 	now = now.replace(tzinfo=pytz.utc)
 	local_now = now.astimezone(pytz.timezone('America/Toronto'))
-	jsonobject = {"last_update": local_now.timestamp(), "comps": [], "last_update_human": local_now.strftime("%m/%d/%Y, %H:%M:%S")}
-	for key in sorted_keys:
-		sorted_champs = [(k, champs[key][k]/len(places[key])) for k in sorted(list(champs[key].keys()), key=lambda x: champs[key][x], reverse=True)]
-		jsonobject["comps"].append({"comp": key, "weighted_winrate": weighted_winrates[key], "winrate": winrates[key], "instances": len(places[key]), "champs": sorted_champs})
+	jsonobject = {"last_update": local_now.timestamp(), "comps": [], "last_update_human": local_now.strftime("%m/%d/%Y, %H:%M:%S"), "updating": True}
+	print("updating")
 	wr_col.update_one({}, {'$set': jsonobject}, upsert=True)
+	temp_comps = []
+	print(len(sorted_keys))
+	for key in sorted_keys[:5000]:
+		sorted_champs = [(k, champs[key][k][0]/len(places[key]), [(item_key, champs[key][k][1][item_key]/champs[key][k][0]) for item_key in sorted(list(champs[key][k][1].keys()), key=lambda x: champs[key][k][1][x], reverse=True)]) for k in sorted(list(champs[key].keys()), key=lambda x: champs[key][x][0], reverse=True)]
+		comp_json = {"comp": key, "weighted_winrate": weighted_winrates[key], "winrate": winrates[key], "instances": len(places[key]), "champs": sorted_champs}
+		temp_comps.append(comp_json)
+		if len(temp_comps) > 100:
+			print("uploading 100 comps")
+			wr_col.update_one({}, {"$push": {"comps": {"$each": temp_comps}}})
+			temp_comps = []
+		else:
+			print(len(temp_comps))
+	wr_col.update_one({}, {"$push": {"comps": {"$each": temp_comps}}})
+	wr_col.update_one({}, {'$set': {"updating", False}})
 	# json.dump(jsonobject, open('comps.json', 'w'))
 	# for key in sorted_keys[:50]:
 	# 	print(', '.join([str(k) for k in key]) + ': ' + str(places[key]))

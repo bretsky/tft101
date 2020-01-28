@@ -27,7 +27,7 @@ def comps():
 	comp_list = wr_col.find()
 	if comp_list.count() == 0:
 		winrates = main.update_comps()
-	elif (datetime.now() - datetime.fromtimestamp(comp_list[0]["last_update"])).total_seconds() > 3 * 60:
+	elif (datetime.now() - datetime.fromtimestamp(comp_list[0]["last_update"])).total_seconds() > 3 * 60 and not comp_list[0]["updating"]:
 		thread = threading.Thread(target=main.update_comps, args=())
 		thread.start()
 		winrates = comp_list[0]

@@ -103,7 +103,7 @@ class App extends React.Component {
  }
 
  componentDidMount() {
-  Axios.get('https://api.tft101.com/comps?n=30').then((response)=>{
+  Axios.get('https://api.tft101.com/comps?n=5').then((response)=>{
     console.log(response)
     this.setState({comps: response.data.map(c => {
       c.active = false;

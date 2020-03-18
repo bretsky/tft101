@@ -35,7 +35,11 @@ def update_comps():
 		traits = []
 		for trait in comp["traits"]:
 			if trait["name"] not in trait_totals:
-				trait_totals[trait["name"]] = trait["tier_total"]
+				# print(trait)
+				try:
+					trait_totals[trait["name"]] = trait["tier_total"]
+				except KeyError:
+					print(trait)
 			if trait["tier_current"] > 0:
 				traits.append((trait["name"], trait["tier_current"]))
 		key = tuple(sorted(traits, key=lambda x: (x[1] / trait_totals[x[0]], x[0]), reverse=True))

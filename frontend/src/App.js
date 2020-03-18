@@ -5,9 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
 
-const setDisplayNames = {'Set2_Blademaster': 'Blademaster', 'Celestial' : 'Lunar', 'Set2_Glacial' : 'Glacial', 'Set2_Ranger' : 'Ranger', 'Wind' : 'Cloud', 'Metal' : 'Steel', 'Set2_Assassin': 'Assassin', 'Set3_Brawler': 'Brawler', 'Set3_Sorcerer': 'Sorcerer', 'MechPilot': 'Mech-Pilot', 'StarGuardian': 'Star Guardian', 'Set3_Blademaster': 'Blademaster', 'Set3_Void': 'Void', 'Set3_Celestial': 'Celestial', 'Set3_Mystic': 'Mystic', 'SpacePirate': 'Space Pirate', 'ManaReaver': 'Mana-Reaver', 'DarkStar': 'Dark Star'}
+const traitDisplayNames = {'Set2_Blademaster': 'Blademaster', 'Celestial' : 'Lunar', 'Set2_Glacial' : 'Glacial', 'Set2_Ranger' : 'Ranger', 'Wind' : 'Cloud', 'Metal' : 'Steel', 'Set2_Assassin': 'Assassin', 'Set3_Brawler': 'Brawler', 'Set3_Sorcerer': 'Sorcerer', 'MechPilot': 'Mech-Pilot', 'StarGuardian': 'Star Guardian', 'Set3_Blademaster': 'Blademaster', 'Set3_Void': 'Void', 'Set3_Celestial': 'Celestial', 'Set3_Mystic': 'Mystic', 'SpacePirate': 'Space Pirate', 'ManaReaver': 'Mana-Reaver', 'DarkStar': 'Dark Star'}
 
-const setUrlNames = {'Set2_Blademaster': 'Blademaster', 'Celestial' : 'Lunar', 'Set2_Glacial' : 'Glacial', 'Set2_Ranger' : 'Ranger', 'Wind' : 'Cloud', 'Metal' : 'Steel', 'Set2_Assassin': 'Assassin', 'Set3_Brawler': 'Brawler', 'Set3_Sorcerer': 'Sorcerer', 'Set3_Blademaster': 'Blademaster', 'Set3_Void': 'Void', 'Set3_Celestial': 'Celestial', 'Set3_Mystic': 'Mystic'}
+const traitUrlNames = {'Set2_Blademaster': 'Blademaster', 'Celestial' : 'Lunar', 'Set2_Glacial' : 'Glacial', 'Set2_Ranger' : 'Ranger', 'Wind' : 'Cloud', 'Metal' : 'Steel', 'Set2_Assassin': 'Assassin', 'Set3_Brawler': 'Brawler', 'Set3_Sorcerer': 'Sorcerer', 'Set3_Blademaster': 'Blademaster', 'Set3_Void': 'Void', 'Set3_Celestial': 'Celestial', 'Set3_Mystic': 'Mystic'}
 
 const champNames = {'KogMaw': 'Kog\'Maw', "Leblanc": "LeBlanc", "RekSai": "Rek'Sai", "DrMundo": "Dr. Mundo", "TFT2_Amumu": "Amumu", "TFT2_Karma": "Karma", "TFT2_Leona": "Leona", "MasterYi": "Master Yi", "TFT2_Senna": "Senna", "TFT3_Malphite": "Malphite", "TFT3_Blitzcrank": "Blitzcrank", "TFT3_Lucian": "Lucian", "TFT3_Ezreal": "Ezreal", "TFT3_Vi": "Vi", "TFT3_Jinx": "Jinx", "Chogath": "Cho'Gath", "TFT3_MissFortune": "Miss Fortune", "TFT3_Thresh": "Thresh", "TFT3_Lulu": "Lulu", "TFT3_Graves": "Graves", "TFT3_Ekko": "Ekko", "TFT3_Zoe": "Zoe", "TFT3_Ahri": "Ahri", "TFT3_Annie": "Annie", "TFT3_Rumble": "Rumble", "TFT3_Syndra": "Syndra", "TFT3_VelKoz": "Vel'Koz", "TFT3_Fizz": "Fizz", "TFT3_Gangplank": "Gangplank", "TFT3_Lux": "Lux", "TFT3_TwistedFate": "Twisted Fate", "TFT3_Sona": "Sona", "TFT3_Poppy": "Poppy", "TFT3_Soraka": "Soraka", "TFT3_Neeko": "Neeko", "TFT3_Fiora": "Fiora", "TFT3_Leona": "Leona", "TFT3_Irelia": "Irelia", "TFT3_Kayle": "Kayle", "TFT3_KaiSa": "Kai'Sa", "Khazix": "Kha'Zix", "TFT3_Shaco": "Shaco", "TFT3_Shen": "Shen", "TFT3_Ashe": "Ashe", "TFT3_Caitlyn": "Caitlyn", "TFT3_WuKong": "Wukong", "TFT3_Jhin": "Jhin", "TFT3_Kassadin": "Kassadin", "TFT3_XinZhao": "Xin Zhao", "TFT3_Jayce": "Jayce", "TFT3_Karma": "Karma", "TFT3_Mordekaiser": "Mordekaiser", "TFT3_JarvanIV": "Jarvan IV"}
 
@@ -56,16 +56,16 @@ class App extends React.Component {
  }
 
  replaceName(name) {
-  if (name in setDisplayNames) {
-    return setDisplayNames[name]
+  if (name in traitDisplayNames) {
+    return traitDisplayNames[name]
   } else {
     return name;
   }
  }
 
  getTraitUrlName(name) {
-  if (name in setUrlNames) {
-    return setUrlNames[name]
+  if (name in traitUrlNames) {
+    return traitUrlNames[name]
   } else {
     return name;
   }
@@ -157,7 +157,7 @@ class App extends React.Component {
                     return (
                       <div className="trait">
                         <div className={"traitImageHex " + this.getCompColor(trait[0], trait[1])}></div>
-                        <img className="traitImage" src = {getTraitUrlName(images[trait[0] + '_TFT_icon.png'])}/>
+                        <img className="traitImage" src = {this.getTraitUrlName(images[trait[0] + '_TFT_icon.png'])}/>
                         <div className="traitText">{trait[0]}</div>
                       </div> 
                       )

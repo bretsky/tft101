@@ -13,33 +13,29 @@ const champNames = {'KogMaw': 'Kog\'Maw', "Leblanc": "LeBlanc", "RekSai": "Rek'S
 const champUrlNames = {"TFT2_Amumu": "Amumu", "TFT2_Karma": "Karma", "TFT2_Leona": "Leona", "TFT2_Senna": "Senna"}
 
 const traitLevels = {
-  'Alchemist' : 1,
-  'Assassin' : 2,
-  'Avatar' : 1,
-  'Berserker' : 2,
-  'Blademaster' : 3,
-  'Cloud' : 3,
-  'Crystal' : 2,
-  'Desert' : 2,
-  'Druid' : 1,
-  'Electric' : 3,
-  'Inferno' : 3,
-  'Light' : 3,
-  'Lunar' : 1,
-  'Mage' : 2,
-  'Mountain' : 1,
-  'Mystic' : 2,
-  'Ocean' : 3,
-  'Poison' : 1,
-  'Predator' : 1,
-  'Shadow' : 2,
-  'Soulbound' : 1,
-  'Steel' : 3,
-  'Summoner' : 2,
-  'Warden' : 3,
-  'Woodland' : 2,
-  'Glacial': 3,
-  'Ranger': 3,
+  'Blademaster': 3,
+  'Blaster': 2,
+  'Brawler': 2,
+  'Celestial': 3,
+  'Chrono': 3,
+  'Cybernetic': 2,
+  'Dark Star': 2,
+  'Demolitionist': 1,
+  'Infiltrator': 2,
+  'Mana-Reaver': 2,
+  'Mech-Pilot': 1,
+  'Mercenary': 1,
+  'Mystic': 2,
+  'Protector': 2,
+  'Rebel': 2,
+  'Sniper': 1,
+  'Sorcerer': 3,
+  'Space Pirate': 2,
+  'Star Guardian': 2,
+  'Starship': 1,
+  'Valkyrie': 1,
+  'Vanguard': 2,
+  'Void': 1
 }
 
 function importAll(r) {
@@ -100,7 +96,7 @@ class App extends React.Component {
       return 'diamondHex';
     }
   }
- }
+ }Oof
 
  componentDidMount() {
   Axios.get('https://api.tft101.com/comps?n=30').then((response)=>{

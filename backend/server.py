@@ -24,16 +24,18 @@ def comps():
 		n = int(n)
 	except (ValueError, TypeError) as e:
 		n = 10
-	comp_list = wr_col.find()
-	if comp_list.count() == 0:
+	if wr_col.count_documents({}) == 0:
 		winrates = main.update_comps()
-	elif (datetime.now() - datetime.fromtimestamp(comp_list[0]["last_update"])).total_seconds() > 3 * 60 and not comp_list[0]["updating"]:
-		thread = threading.Thread(target=main.update_comps, args=())
-		thread.start()
-		winrates = comp_list[0]
+		return jsonify(winrates["comps"][:n])
 	else:
-		winrates = comp_list[0]
-	return jsonify(winrates["comps"][:n])
+		comp_list = wr_col.find()[0]
+		now = datetime.now()
+		last_update = datetime.fromtimestamp(comp_list["last_update"])
+		timedelta = (now - last_update).total_seconds()
+		if timedelta > 3 * 60 and not comp_list["updating"]:
+			thread = threading.Thread(target=main.update_comps, args=())
+			thread.start()
+		return jsonify(comp_list["comps"][:n])	
 
 if __name__ == '__main__':
 	application.run(host='0.0.0.0', port=1999, debug=True)

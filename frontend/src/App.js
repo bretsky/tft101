@@ -6,7 +6,7 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
 
 const displayNames = {'Set2_Blademaster': 'Blademaster', 'Celestial' : 'Lunar',
- 'Set2_Glacial' : 'Glacial', 'Set2_Ranger' : 'Ranger', 'Wind' : 'Cloud', 'Metal' : 'Steel'}
+ 'Set2_Glacial' : 'Glacial', 'Set2_Ranger' : 'Ranger', 'Wind' : 'Cloud', 'Metal' : 'Steel', 'Set2_Assassin': 'Assassin'}
 
 const champNames = {'KogMaw': 'Kog\'Maw', "Leblanc": "LeBlanc", "RekSai": "Rek'Sai", "DrMundo": "Dr. Mundo", "TFT2_Amumu": "Amumu", "TFT2_Karma": "Karma", "TFT2_Leona": "Leona", "MasterYi": "Master Yi", "TFT2_Senna": "Senna"}
 

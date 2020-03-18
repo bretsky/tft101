@@ -157,7 +157,7 @@ class App extends React.Component {
                     return (
                       <div className="trait">
                         <div className={"traitImageHex " + this.getCompColor(trait[0], trait[1])}></div>
-                        <img className="traitImage" src = {getTraitUrlName(images[trait[0]]) + '_TFT_icon.png']}/>
+                        <img className="traitImage" src = {getTraitUrlName(images[trait[0] + '_TFT_icon.png'])}/>
                         <div className="traitText">{trait[0]}</div>
                       </div> 
                       )

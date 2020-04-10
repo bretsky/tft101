@@ -110,14 +110,23 @@ class App extends React.Component {
  componentDidMount() {
   const urlParams = new URLSearchParams(window.location.search);
   const specificComp = urlParams.get('comp');
-  console.log(specificComp);
-  Axios.get('https://api.tft101.com/comps?n=30').then((response)=>{
-    console.log(response)
-    this.setState({comps: response.data.map(c => {
-      c.active = false;
-      return c;
-    })})
-  });
+  if (specificComp !== null) {
+    Axios.get('https://api.tft101.com/comps?n=30&comp=' + specificComp).then((response)=>{
+      console.log(response)
+      this.setState({comps: response.data.map(c => {
+        c.active = false;
+        return c;
+      })})
+    });
+  } else {
+    Axios.get('https://api.tft101.com/comps?n=30').then((response)=>{
+      console.log(response)
+      this.setState({comps: response.data.map(c => {
+        c.active = false;
+        return c;
+      })})
+    });
+  }
   Axios.get('https://ddragon.leagueoflegends.com/api/versions.json').then((response)=>{
     console.log(response)
     this.setState({version: response.data[0]})

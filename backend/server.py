@@ -36,11 +36,9 @@ def comps():
 	except (ValueError, TypeError) as e:
 		comp = False
 	if wr_col.count_documents({}) == 0:
-		application.logger.error('0')
 		winrates = main.update_comps()
 		return jsonify(list(filter(lambda x: filter_comps(x, comp), winrates["comps"]))[:n])
 	else:
-		application.logger.error('1')
 		comp_list = wr_col.find()[0]
 		now = datetime.now()
 		last_update = datetime.fromtimestamp(comp_list["last_update"])
@@ -48,7 +46,6 @@ def comps():
 		if timedelta > 3 * 60 and not comp_list["updating"]:
 			thread = threading.Thread(target=main.update_comps, args=())
 			thread.start()
-		application.logger.error(comp)
 		return jsonify(list(filter(lambda x: filter_comps(x, comp), comp_list["comps"]))[:n])
 
 if __name__ == '__main__':

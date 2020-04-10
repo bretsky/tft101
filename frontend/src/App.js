@@ -105,9 +105,12 @@ class App extends React.Component {
       return 'diamondHex';
     }
   }
- }Oof
+ }
 
  componentDidMount() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const specificComp = urlParams.get('comp');
+  console.log(specificComp);
   Axios.get('https://api.tft101.com/comps?n=30').then((response)=>{
     console.log(response)
     this.setState({comps: response.data.map(c => {

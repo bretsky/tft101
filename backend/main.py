@@ -39,7 +39,7 @@ def update_comps():
 				try:
 					trait_totals[trait["name"]] = trait["tier_total"]
 				except KeyError:
-					print(trait)
+					pass
 			if trait["tier_current"] > 0:
 				traits.append((trait["name"], trait["tier_current"]))
 		key = tuple(sorted(traits, key=lambda x: (x[1] / trait_totals[x[0]], x[0]), reverse=True))
@@ -104,7 +104,7 @@ def update_comps():
 		comp_json = {"comp": key, "weighted_winrate": weighted_winrates[key], "winrate": winrates[key], "instances": len(places[key]), "champs": sorted_champs}
 		temp_comps.append(comp_json)
 		if len(temp_comps) > 100:
-			print("uploading 100 comps")
+			# print("uploading 100 comps")
 			wr_col.update_one({}, {"$push": {"comps": {"$each": temp_comps}}})
 			temp_comps = []
 	wr_col.update_one({}, {"$push": {"comps": {"$each": temp_comps}}})

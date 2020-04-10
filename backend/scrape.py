@@ -41,6 +41,8 @@ def save_match(match):
 
 def save_recent_matches(puuid):
 	summoner = riot_api.get_summoner_by_puuid(puuid)
+	if summoner.null == True:
+		return []
 	print(summoner.name)
 	matches = riot_api.get_tft_matches(summoner)
 	puuids = []

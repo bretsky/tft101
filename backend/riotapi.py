@@ -18,7 +18,9 @@ class RiotAPI(object):
 	def get_summoner_by_puuid(self, puuid):
 		url = "https://{}.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/{}".format(self.region, puuid)
 		res = requests.get(url=url, headers=self.headers)
-		print(res)
+		print(res.json())
+		if 'status' in res.json() and res.json()['status']['status_code'] == 400:
+			return Summoner({'null': True})
 		return Summoner(res.json())
 
 	def get_matches(self, summoner, begin_index=-1, end_index=-1):
@@ -58,6 +60,10 @@ class RiotAPI(object):
 
 class Summoner(object):
 	def __init__(self, data):
+		if ('null' in data and data['null'] == True) or 'id' not in data:
+			self.null = True
+			return
+		self.null = False
 		self.id = data['id']
 		self.accountId = data['accountId']
 		self.puuid = data['puuid']

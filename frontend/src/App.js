@@ -20,6 +20,8 @@ class App extends React.Component {
     return "MonkeyKing";
   } else if (name === "Jarvin IV") {
     return "JarvanIV";
+  } else if (name === "Nunu & Willump") {
+    return "Nunu";
   }
   return name.replace(' ', '').replace("'", '');
  }

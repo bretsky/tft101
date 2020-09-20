@@ -4,8 +4,8 @@ import Axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
-// const ENDPOINT = "https://api.tft101.com";
-const ENDPOINT = "http://localhost:1999";
+const ENDPOINT = "https://api.tft101.com";
+// const ENDPOINT = "http://localhost:1999";
 
 class App extends React.Component {
  constructor(props) {

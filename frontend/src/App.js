@@ -18,6 +18,8 @@ class App extends React.Component {
  urlEncodeChampName(name) {
   if (name === "Wukong") {
     return "MonkeyKing";
+  } else if (name === "Jarvin IV") {
+    return "JarvanIV";
   }
   return name.replace(' ', '').replace("'", '');
  }
@@ -52,6 +54,7 @@ class App extends React.Component {
   })
   Axios.get(ENDPOINT + '/champions').then((response)=>{
     console.log(response)
+    response.data["TFT4_JarvanIV"] = "Jarvan IV";
     this.setState({champions: response.data})
   })
  }

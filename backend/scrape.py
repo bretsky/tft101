@@ -3,8 +3,10 @@ import json
 import pymongo
 from datetime import datetime
 import sys
+import requests
 
 env = json.load(open("env.json", "r"))
+version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
 api_key = env["api-key"]
 region = env["region"]
 tftregion = env["tftregion"]
@@ -15,7 +17,7 @@ riot_api = riotapi.RiotAPI(api_key, region, tftregion)
 
 myclient = pymongo.MongoClient(env["mongo_url"])
 mydb = myclient["comps"]
-mycol = mydb[env["version_big"] + "." + env["version_small"]]
+mycol = mydb[version]
 
 def convert_to_json(participant):
 	return {'place': participant.place, 'units': participant.units, 'traits': participant.traits, 'match_id': participant.match_id, 'puuid': participant.puuid}
@@ -50,7 +52,8 @@ def save_recent_matches(puuid):
 		# print(match.version)
 		if match != False:
 			version_number = match.version.split(' ')[1].split('.')
-			if version_number[0] == env["version_big"] and version_number[1] == env["version_small"]:
+			current_version = version.split('.')
+			if version_number[0] == current_version[0] and version_number[1] == current_version[1]:
 				puuids.extend(save_match(match))
 			else:
 				print("Wrong version")

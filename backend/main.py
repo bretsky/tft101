@@ -2,15 +2,25 @@ import json
 import pymongo
 from datetime import datetime
 import pytz
+import requests
+from PIL import Image
 
 env = json.load(open("env.json", "r"))
 # champ_data = json.load(open("champions.json", "r"))
 
+version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
+
 myclient = pymongo.MongoClient(env["mongo_url"])
 comp_db = myclient["comps"]
 wr_db = myclient["winrates"]
-comp_col = comp_db[env["version_big"] + "." + env["version_small"]]
-wr_col = wr_db[env["version_big"] + "." + env["version_small"]]
+comp_col = comp_db[version]
+wr_col = wr_db[version]
+set_data = myclient["set_data"]
+set_traits = set_data["set_traits"]
+set_champions = set_data["set_champions"]
+
+
+indices = {"bronze": 2, "silver": 3, "gold": 4, "chromatic": 5}
 
 
 def update_comps():
@@ -24,8 +34,9 @@ def update_comps():
 	winrates = {}
 	weighted_winrates = {}
 	champs = {}
-
 	trait_totals = {}
+	for trait in set_traits.find():
+		trait_totals[trait["key"]] = trait["sets"][-1]["min"]
 	comps = comp_col.find({})
 	print("Got comps")
 	n = 0
@@ -34,12 +45,6 @@ def update_comps():
 
 		traits = []
 		for trait in comp["traits"]:
-			if trait["name"] not in trait_totals:
-				# print(trait)
-				try:
-					trait_totals[trait["name"]] = trait["tier_total"]
-				except KeyError:
-					pass
 			if trait["tier_current"] > 0:
 				traits.append((trait["name"], trait["tier_current"]))
 		key = tuple(sorted(traits, key=lambda x: (x[1] / trait_totals[x[0]], x[0]), reverse=True))
@@ -124,6 +129,42 @@ def update_comps():
 	# print(uniques)
 	# print(longest)
 	return jsonobject
+
+def get_trait_image(trait, n, logger):
+	colour = get_colour(trait, n, logger)
+	trait = trait.replace(' ', '')
+	image_name = "set/computed_images/{}_{}.png".format(trait, colour)
+	try:
+		img = Image.open(image_name)
+		return image_name
+	except FileNotFoundError:
+		bg = Image.open("set/traits/bg.png")
+		index = indices[colour]
+		bg = bg.crop((56 * index, 0, 56 * index + 52, 58))
+		icon = Image.open("set/traits/{}.png".format(trait))
+		icon = icon.convert("RGBA")
+		data = icon.load()
+		for y in range(icon.size[1]):
+			for x in range(icon.size[0]):
+				if data[x, y] == (196, 196, 196, 255):
+					data[x, y] = (0, 0, 0, 0)
+		# icon.putdata(data)
+		icon = icon.resize((int(icon.size[0] * 0.6), int(icon.size[1] * 0.6)), Image.BICUBIC)
+		bg.paste(icon, ((bg.size[0] - icon.size[0]) // 2, (bg.size[1] - icon.size[1]) // 2), icon)
+		bg.save(image_name)
+		return image_name
+
+
+def get_colour(trait, n, logger):
+	logger.info(trait)
+	for t in set_traits.find():
+		if t["name"].lower() == trait:
+			logger.info(len(t["sets"]))
+			logger.info(t["sets"][n - 1])
+			return t["sets"][n - 1]["style"]
+	return None
+
+
 
 if __name__ == "__main__":
 	update_comps()

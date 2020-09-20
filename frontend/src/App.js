@@ -4,50 +4,8 @@ import Axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
-
-const traitDisplayNames = {'Set2_Blademaster': 'Blademaster', 'Celestial' : 'Lunar', 'Set2_Glacial' : 'Glacial', 'Set2_Ranger' : 'Ranger', 'Wind' : 'Cloud', 'Metal' : 'Steel', 'Set2_Assassin': 'Assassin', 'Set3_Brawler': 'Brawler', 'Set3_Sorcerer': 'Sorcerer', 'MechPilot': 'Mech-Pilot', 'StarGuardian': 'Star Guardian', 'Set3_Blademaster': 'Blademaster', 'Set3_Void': 'Void', 'Set3_Celestial': 'Celestial', 'Set3_Mystic': 'Mystic', 'SpacePirate': 'Space Pirate', 'ManaReaver': 'Mana-Reaver', 'DarkStar': 'Dark Star'}
-
-const traitUrlNames = {'Star Guardian': 'Star_Guardian', 'Dark Star': 'Dark_Star', 'Space Pirate': 'Space_Pirate'}
-
-const champNames = {'KogMaw': 'Kog\'Maw', "Leblanc": "LeBlanc", "RekSai": "Rek'Sai", "DrMundo": "Dr. Mundo", "TFT2_Amumu": "Amumu", "TFT2_Karma": "Karma", "TFT2_Leona": "Leona", "MasterYi": "Master Yi", "TFT2_Senna": "Senna", "TFT3_Malphite": "Malphite", "TFT3_Blitzcrank": "Blitzcrank", "TFT3_Lucian": "Lucian", "TFT3_Ezreal": "Ezreal", "TFT3_Vi": "Vi", "TFT3_Jinx": "Jinx", "Chogath": "Cho'Gath", "TFT3_MissFortune": "Miss Fortune", "TFT3_Thresh": "Thresh", "TFT3_Lulu": "Lulu", "TFT3_Graves": "Graves", "TFT3_Ekko": "Ekko", "TFT3_Zoe": "Zoe", "TFT3_Ahri": "Ahri", "TFT3_Annie": "Annie", "TFT3_Rumble": "Rumble", "TFT3_Syndra": "Syndra", "TFT3_VelKoz": "Vel'Koz", "TFT3_Fizz": "Fizz", "TFT3_Gangplank": "Gangplank", "TFT3_Lux": "Lux", "TFT3_TwistedFate": "Twisted Fate", "TFT3_Sona": "Sona", "TFT3_Poppy": "Poppy", "TFT3_Soraka": "Soraka", "TFT3_Neeko": "Neeko", "TFT3_Fiora": "Fiora", "TFT3_Leona": "Leona", "TFT3_Irelia": "Irelia", "TFT3_Kayle": "Kayle", "TFT3_KaiSa": "Kai'Sa", "Khazix": "Kha'Zix", "TFT3_Shaco": "Shaco", "TFT3_Shen": "Shen", "TFT3_Ashe": "Ashe", "TFT3_Caitlyn": "Caitlyn", "TFT3_WuKong": "Wukong", "TFT3_Jhin": "Jhin", "TFT3_Kassadin": "Kassadin", "TFT3_XinZhao": "Xin Zhao", "TFT3_Jayce": "Jayce", "TFT3_Karma": "Karma", "TFT3_Mordekaiser": "Mordekaiser", "TFT3_JarvanIV": "Jarvan IV", "TFT3_Darius": "Darius", "TFT3_MasterYi": "Master Yi", "TFT3_AurelionSol": "Aurelion Sol", "TFT3_Ziggs": "Ziggs", "TFT3_Yasuo": "Yasuo", "TFT3_Xayah": "Xayah", "TFT3_Rakan": "Rakan", "TFT3_Xerath": "Xerath", "TFT3_Viktor": "Viktor", "TFT3_Vayne": "Vayne", "TFT3_Riven": "Riven", "TFT3_Urgot": "Urgot", "TFT3_Janna": "Janna", "TFT3_Cassiopeia": "Cassiopeia", "TFT3_Nocturne": "Nocturne", "TFT3_Zed": "Zed", "TFT3_KogMaw": "Kog'Maw", "TFT3_Gnar": "Gnar", "TFT3_Illaoi": "Illaoi", "TFT3_Nautilus": "Nautilus", "TFT3_Bard": "Bard", "TFT3_Teemo": "Teemo"}
-
-const champUrlNames = {"TFT2_Amumu": "Amumu", "TFT2_Karma": "Karma", "TFT2_Leona": "Leona", "TFT2_Senna": "Senna", "TFT3_Malphite": "Malphite", "TFT3_Blitzcrank": "Blitzcrank", "TFT3_Lucian": "Lucian", "TFT3_Ezreal": "Ezreal", "TFT3_Vi": "Vi", "TFT3_Jinx": "Jinx", "TFT3_MissFortune": "MissFortune", "TFT3_Thresh": "Thresh", "TFT3_Lulu": "Lulu", "TFT3_Graves": "Graves", "TFT3_Ekko": "Ekko", "TFT3_Zoe": "Zoe", "TFT3_Ahri": "Ahri", "TFT3_Annie": "Annie", "TFT3_Rumble": "Rumble", "TFT3_Syndra": "Syndra", "TFT3_VelKoz": "Velkoz", "TFT3_Fizz": "Fizz", "TFT3_Gangplank": "Gangplank", "TFT3_Lux": "Lux", "TFT3_TwistedFate": "TwistedFate", "TFT3_Sona": "Sona", "TFT3_Poppy": "Poppy", "TFT3_Soraka": "Soraka", "TFT3_Neeko": "Neeko", "TFT3_Fiora": "Fiora", "TFT3_Leona": "Leona", "TFT3_Irelia": "Irelia", "TFT3_Kayle": "Kayle", "TFT3_KaiSa": "Kaisa", "Khazix": "Khazix", "TFT3_Shaco": "Shaco", "TFT3_Shen": "Shen", "TFT3_Ashe": "Ashe", "TFT3_Caitlyn": "Caitlyn", "TFT3_WuKong": "MonkeyKing", "TFT3_Jhin": "Jhin", "TFT3_Kassadin": "Kassadin", "TFT3_XinZhao": "XinZhao", "TFT3_Jayce": "Jayce", "TFT3_Karma": "Karma", "TFT3_Mordekaiser": "Mordekaiser", "TFT3_JarvanIV": "JarvanIV", "TFT3_Darius": "Darius", "TFT3_MasterYi": "MasterYi", "TFT3_AurelionSol": "AurelionSol", "TFT3_Ziggs": "Ziggs", "TFT3_Yasuo": "Yasuo", "TFT3_Xayah": "Xayah", "TFT3_Rakan": "Rakan", "TFT3_Xerath": "Xerath", "TFT3_Viktor": "Viktor", "TFT3_Vayne": "Vayne", "TFT3_Riven": "Riven", "TFT3_Urgot": "Urgot", "TFT3_Janna": "Janna", "TFT3_Cassiopeia": "Cassiopeia", "TFT3_Nocturne": "Nocturne", "TFT3_Zed": "Zed", "TFT3_KogMaw": "Kog'Maw", "TFT3_Gnar": "Gnar", "TFT3_Illaoi": "Illaoi", "TFT3_Nautilus": "Nautilus", "TFT3_Bard": "Bard", "TFT3_Teemo": "Teemo"}
-
-const traitLevels = {
-  "Battlecast": 4,
-  'Blademaster': 3,
-  'Blaster': 2,
-  'Brawler': 2,
-  'Celestial': 3,
-  'Chrono': 3,
-  'Cybernetic': 2,
-  'Dark Star': 2,
-  'Demolitionist': 1,
-  'Infiltrator': 2,
-  'Mana-Reaver': 2,
-  'Mech-Pilot': 1,
-  'Mercenary': 1,
-  'Mystic': 2,
-  'Paragon': 1,
-  'Protector': 2,
-  'Rebel': 2,
-  'Sniper': 1,
-  'Sorcerer': 3,
-  'Space Pirate': 2,
-  'Star Guardian': 2,
-  'Starship': 1,
-  'Valkyrie': 1,
-  'Vanguard': 2,
-  'Void': 1
-}
-
-function importAll(r) {
-  let images = {};
-  r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-  return images;
-}
-
-const images = importAll(require.context('./img', false, /\.(png|jpe?g|svg)$/));
+// const ENDPOINT = "https://api.tft101.com";
+const ENDPOINT = "http://localhost:1999";
 
 class App extends React.Component {
  constructor(props) {
@@ -57,63 +15,18 @@ class App extends React.Component {
   }
  }
 
- replaceName(name) {
-  if (name in traitDisplayNames) {
-    return traitDisplayNames[name]
-  } else {
-    return name;
+ urlEncodeChampName(name) {
+  if (name === "Wukong") {
+    return "MonkeyKing";
   }
- }
-
- getTraitUrlName(name) {
-  if (name in traitUrlNames) {
-    return traitUrlNames[name]
-  } else {
-    return name;
-  }
- }
-
- formatChampName(name) {
-  if (name in champNames) {
-    return champNames[name]
-  } else {
-    return name;
-  }
- }
-
- getChampUrlName(name) {
-  if (name in champUrlNames) {
-    return champUrlNames[name]
-  } else {
-    return name;
-  }
- }
-
- getCompColor(name, level) {
-  if (traitLevels[name] === 1) {
-    return 'goldHex';
-  } else if (traitLevels[name] === 2){
-    if(level === 1){
-      return 'bronzeHex';
-    }else if(level === 2){
-      return 'goldHex' ;
-    }
-  }else if(traitLevels[name] === 3){
-    if(level === 1){
-      return 'bronzeHex';
-    }else if(level === 2){
-      return 'silverHex';
-    }else if(level === 3){
-      return 'diamondHex';
-    }
-  }
+  return name.replace(' ', '').replace("'", '');
  }
 
  componentDidMount() {
   const urlParams = new URLSearchParams(window.location.search);
   const specificComp = urlParams.get('comp');
   if (specificComp !== null) {
-    Axios.get('https://api.tft101.com/comps?n=30&comp=' + specificComp).then((response)=>{
+    Axios.get(ENDPOINT + '/comps?n=30&comp=' + specificComp).then((response)=>{
       console.log(response)
       this.setState({comps: response.data.map(c => {
         c.active = false;
@@ -121,7 +34,7 @@ class App extends React.Component {
       })})
     });
   } else {
-    Axios.get('https://api.tft101.com/comps?n=30').then((response)=>{
+    Axios.get(ENDPOINT + '/comps?n=30').then((response)=>{
       console.log(response)
       this.setState({comps: response.data.map(c => {
         c.active = false;
@@ -132,7 +45,15 @@ class App extends React.Component {
   Axios.get('https://ddragon.leagueoflegends.com/api/versions.json').then((response)=>{
     console.log(response)
     this.setState({version: response.data[0]})
-  }) 
+  })
+  Axios.get(ENDPOINT + '/traits').then((response)=>{
+    console.log(response)
+    this.setState({traits: response.data})
+  })
+  Axios.get(ENDPOINT + '/champions').then((response)=>{
+    console.log(response)
+    this.setState({champions: response.data})
+  })
  }
 
  toggleDropdown(index) {
@@ -142,7 +63,6 @@ class App extends React.Component {
  }
 
  render() {
-  console.log(images);
   // console.log(this.state.comps)
   return (
     <div className = "App">
@@ -159,7 +79,7 @@ class App extends React.Component {
           console.log(comp)
           var traits = []
           for(var trait of comp.comp) {
-            traits.push([this.replaceName(trait[0]), trait[1]])
+            traits.push([trait[0], trait[1]])
           }
           console.log(traits)
           return (
@@ -170,9 +90,8 @@ class App extends React.Component {
                   {traits.map(trait => {
                     return (
                       <div className="trait">
-                        <div className={"traitImageHex " + this.getCompColor(trait[0], trait[1])}></div>
-                        <img className="traitImage" src = {images[this.getTraitUrlName(trait[0]) + '_TFT_icon.png']}/>
-                        <div className="traitText">{trait[0]}</div>
+                        <img className="traitImage" src = {ENDPOINT + "/trait/" + trait[0] + "/image?n=" + trait[1]}/>
+                        <div className="traitText">{this.state.traits[trait[0]]}</div>
                       </div> 
                       )
                   })}
@@ -182,11 +101,31 @@ class App extends React.Component {
               {this.state.comps[i].active && 
                 <div className="compDetails">
                   {comp.champs.map(champ => {
+                    champ[2] = champ[2].slice(0, 6);
+                    var original_length = champ[2].length
+                    for (var i=0; i < (6 - original_length); i++) {
+                      champ[2].push([-1, -1]);
+                    }
                     return (
                       <div className="champ">
-                        <img className="champImage" src={"http://ddragon.leagueoflegends.com/cdn/" + this.state.version + "/img/champion/" + this.getChampUrlName(champ[0]) + ".png"}/>
-                        <div>{this.formatChampName(champ[0]) + ': '}</div>
-                        <div>{Math.round(champ[1] * 1000) / 10 + '%'}</div>
+                        <span class="mytooltip tooltip-effect-1">
+                          <img className="champImage tooltip-item" src={"http://ddragon.leagueoflegends.com/cdn/" + this.state.version + "/img/champion/" + this.urlEncodeChampName(this.state.champions[champ[0]]) + ".png"}/>
+                          <div>{this.state.champions[champ[0]] + ': '}</div>
+                          <div>{Math.round(champ[1] * 1000) / 10 + '%'}</div>
+                          <span class="tooltip-content clearfix">
+                              {champ[2].map(item => {
+                                if (item[0] === -1) {
+                                  return (
+                                      <img className="item-image empty-image" src={ENDPOINT + "/items/01"}/>
+                                    )
+                                } else {
+                                  return (
+                                      <img className="item-image" src={ENDPOINT + "/items/" + item[0]}/>
+                                    )
+                                }
+                              })}
+                          </span>
+                        </span>
                       </div>
                       )
                   })}

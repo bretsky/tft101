@@ -75,83 +75,6 @@
   height: 80px;
 }
 
-.traitImageHex {
- 
-  position: relative;
-  width: 72px; 
-  height: 41.57px;
-  background-color: #64C7CC;
-  margin: 20.78px 0;
-}
-
-.traitImageHex:before {
-  content: "";
-  position: absolute;
-  width: 0;
-  border-left: 36px solid transparent;
-  border-right: 36px solid transparent;
-  bottom: 100%;
-  border-bottom: 20.78px solid #64C7CC;
-}
-
-.traitImageHex:after {
-  content: "";
-  position: absolute;
-  width: 0;
-  border-left: 36px solid transparent;
-  border-right: 36px solid transparent;
-  top: 100%;
-  width: 0;
-  border-top: 20.78px solid #64C7CC;
-}
-
-.bronzeHex {
-  background-color: #906431;
-}
-
-.bronzeHex:before {
-  border-bottom: 20.78px solid #906431;
-}
-
-.bronzeHex:after {
-  border-top: 20.78px solid #906431;
-}
-
-.goldHex {
-  background-color: #b79c30;
-}
-
-.goldHex:before {
-  border-bottom: 20.78px solid #b79c30;
-}
-
-.goldHex:after {
-  border-top: 20.78px solid #b79c30;
-}
-
-.silverHex {
-  background-color: #b0b0b0;
-}
-
-.silverHex:before {
-  border-bottom: 20.78px solid #b0b0b0;
-}
-
-.silverHex:after {
-  border-top: 20.78px solid #b0b0b0;
-}
-
-.diamondHex {
-  background-color: #96ffff;
-}
-
-.diamondHex:before {
-  border-bottom: 20.78px solid #96ffff;
-}
-
-.diamondHex:after {
-  border-top: 20.78px solid #96ffff;
-}
 
 .traitWinrate {
   float: right;
@@ -162,17 +85,15 @@
 
 .traitImage {
   position: relative;
-  height: 55px;
-  width: 55px;
-  top: -69.07px;
-  left: 8.5px;
-  filter : brightness(0);
+  padding-left: 10px;
+  padding-right: 10px;
+  top: 16px;
 }
 
 .traitText {
-  font-size: 10px;
+  font-size: 12px;
   position: relative;
-  top: -50.07px;
+  top: 16px;
   text-align: center;
 }
 
@@ -203,4 +124,89 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.mytooltip {
+    display: inline;
+    position: relative;
+    z-index: 999
+}
+
+.mytooltip .tooltip-content {
+    position: absolute;
+    z-index: 9999;
+    width: 384px;
+    left: 50%;
+    margin: 0 0 20px -192px;
+    bottom: calc(42px + 100%);
+    text-align: left;
+    font-size: 14px;
+    line-height: 30px;
+    -webkit-box-shadow: -5px -5px 15px rgba(48, 54, 61, 0.2);
+    box-shadow: -5px -5px 15px rgba(48, 54, 61, 0.2);
+    background: #2b2b2b;
+    opacity: 0;
+    cursor: default;
+    pointer-events: none
+}
+
+.mytooltip .tooltip-content::after {
+    content: '';
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: #2a3035 transparent transparent;
+    border-width: 10px;
+    margin-left: -10px
+}
+
+.mytooltip .tooltip-item::after {
+    content: '';
+    position: absolute;
+    width: 384px;
+    height: 20px;
+    bottom: 100%;
+    left: 50%;
+    pointer-events: none;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%)
+}
+
+.mytooltip:hover .tooltip-item::after {
+    pointer-events: auto
+}
+
+.mytooltip:hover .tooltip-content {
+    pointer-events: auto;
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0deg);
+    transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0deg)
+}
+
+.mytooltip:hover .tooltip-content2 {
+    opacity: 1;
+    font-size: 18px
+}
+
+.mytooltip .tooltip-text {
+    font-size: 14px;
+    line-height: 24px;
+    display: block;
+    padding: 1.31em 1.21em 1.21em 0;
+    color: #fff
+}
+
+.item-image {
+  width: 48px;
+  height: 48px;
+  margin: 8px;
+}
+
+.empty-image {
+  filter: brightness(0%);
 }
